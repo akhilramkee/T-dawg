@@ -11,7 +11,7 @@ MAX_LENGTH = 60
 BATCH_SIZE = 64
 BUFFER_SIZE = 20000
 
-def tokenize_sentence(inputs, outputs):
+def tokenize_sentence(token_processor, inputs, outputs):
     t_inputs, t_outputs = [],[]
 
     for (s1,s2) in zip(inputs, outputs):
@@ -45,7 +45,7 @@ def preprocess_sentence(sentence):
     Load Conversation
 '''
 
-def load_conversations():
+def load_conversations(path_to_movie_lines, path_to_movie_conversations):
     id2line = {}
     with open(path_to_movie_lines, errors='ignore') as file:
         lines = file.readlines()
@@ -64,7 +64,8 @@ def load_conversations():
             outputs.append(preprocess_sentence(id2line[conversation[i+1]]))
     return inputs, outputs
 
-if __name__=='__main__':
+def run():
+    global START_TOKEN, END_TOKEN
     path_to_zip = tf.keras.utils.get_file(
     'cornell_movie_dialogs.zip',
     origin=
@@ -78,7 +79,7 @@ if __name__=='__main__':
     path_to_movie_conversations = os.path.join(path_to_dataset,
                                             'movie_conversations.txt')
     
-    questions, answers = load_conversations()
+    questions, answers = load_conversations(path_to_movie_lines, path_to_movie_conversations)
     
     '''
         Creating a tokenizer which would break the questions and answers
@@ -91,7 +92,7 @@ if __name__=='__main__':
     '''
         Tokenizing the Inputs and Outputs using the vocab
     '''
-    questions, answers = tokenize_sentence(questions, answers)
+    questions, answers = tokenize_sentence(token_processor, questions, answers)
     
     '''
         Dataset prefetching and stuff
@@ -106,6 +107,3 @@ if __name__=='__main__':
         }
     )).cache().shuffle(BUFFER_SIZE).batch(BATCH_SIZE).prefetch(tf.data.experimental.AUTOTUNE)
     
-
-
-

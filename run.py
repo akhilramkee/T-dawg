@@ -1,4 +1,4 @@
-from server import app
+from server import model_
 
 if __name__ == '__main__':
-    app.run()
+    model_.run()

@@ -1,3 +1,5 @@
+import tensorflow as tf
+
 def create_padding_mask(x):
   mask = tf.cast(tf.math.equal(x, 0), tf.float32)
   return mask[:, tf.newaxis, tf.newaxis, :]

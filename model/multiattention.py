@@ -40,7 +40,7 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         value = self.split_heads(self.value_dense(value), batch_size)
 
         scaled_attention = tf.transpose(attention_dot_product(query, key, value, mask), perm=[0,2,1,3])
-        concat_attention = tf.reshape(scaled_attention, batch_size, -1, self.d_model)
+        concat_attention = tf.reshape(scaled_attention, (batch_size, -1, self.d_model))
         outputs = self.dense(concat_attention)
         
         return outputs

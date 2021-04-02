@@ -18,7 +18,7 @@ def decoder_layer(units, d_model, num_heads, dropout, name="decoder_layer"):
   attention1 = tf.keras.layers.LayerNormalization(
       epsilon=1e-6)(attention1 + inputs)
 
-  attention2 = MultiHeadAttention(
+  attention2 = multiattention.MultiHeadAttention(
       d_model, num_heads, name="attention_2")(inputs={
           'query': attention1,
           'key': enc_outputs,
